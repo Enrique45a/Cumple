@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tu cumpleaños 🎂</title>
+<style>
+:root{--bg1:#ffe3ec;--bg2:#fff1d6;--card:rgba(255,255,255,.88);--tx:#3a2530;--mut:#8a6a76;--ac:#e8487a;--ac2:#ffd1df;--bd:#f6bfd0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg1:#2a1220;--bg2:#1c1530;--card:rgba(48,28,42,.9);--tx:#fbe9f0;--mut:#d0a9ba;--ac:#ff7aa2;--ac2:#523043;--bd:#6a3a52}}
+:root[data-theme="dark"]{--bg1:#2a1220;--bg2:#1c1530;--card:rgba(48,28,42,.9);--tx:#fbe9f0;--mut:#d0a9ba;--ac:#ff7aa2;--ac2:#523043;--bd:#6a3a52}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;color:var(--tx);font-family:"Quicksand","Trebuchet MS",system-ui,sans-serif;min-height:100vh;background:linear-gradient(160deg,var(--bg1),var(--bg2));background-attachment:fixed;display:flex;justify-content:center;align-items:center;padding:22px 16px;overflow-x:hidden}
+.petal{position:fixed;top:-40px;font-size:22px;opacity:.55;pointer-events:none;animation:fall linear infinite;z-index:0}
+@keyframes fall{to{transform:translateY(110vh) rotate(360deg)}}
+.wrap{width:100%;max-width:520px;position:relative;z-index:1}
+.card{background:var(--card);backdrop-filter:blur(6px);border:1.5px solid var(--bd);border-radius:26px;padding:28px 22px;box-shadow:0 14px 40px rgba(232,72,122,.18);animation:pop .4s ease}
+@keyframes pop{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+h1{font-size:1.7rem;margin:4px 0 12px;line-height:1.2}
+h2{font-size:1.3rem;margin:4px 0 6px;line-height:1.3}
+p{line-height:1.55;margin:0 0 12px;color:var(--mut)}
+.big{font-size:3.2rem;display:block;margin-bottom:4px;animation:bob 2.4s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-8px) rotate(-4deg)}}
+.qe{font-size:2.2rem;display:block}
+.bar{height:9px;background:var(--ac2);border-radius:9px;margin-bottom:14px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#ff9ab5,var(--ac));border-radius:9px;transition:width .4s}
+.opts{display:flex;flex-direction:column;gap:9px;margin:16px 0}
+.opt{border:2px solid var(--bd);background:transparent;color:var(--tx);border-radius:16px;padding:13px 16px;font-size:1rem;text-align:left;cursor:pointer;font-family:inherit;transition:transform .12s,background .12s}
+.opt:active{transform:scale(.98)}
+.opt.sel{background:var(--ac2);border-color:var(--ac);font-weight:700}
+.opt.sel::after{content:" 💖"}
+textarea,input[type=text]{width:100%;border:2px solid var(--bd);background:transparent;color:var(--tx);border-radius:16px;padding:13px;font-size:1rem;font-family:inherit;margin:14px 0}
+textarea{min-height:110px;resize:vertical}
+.row{display:flex;gap:10px;margin-top:10px}
+button.btn{flex:1;border:0;border-radius:16px;padding:14px;font-size:1.05rem;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#ff8aa9,var(--ac));color:#fff;font-family:inherit;box-shadow:0 6px 16px rgba(232,72,122,.3)}
+button.btn.sec{background:var(--ac2);color:var(--tx);box-shadow:none}
+button.btn:disabled{opacity:.45;box-shadow:none}
+.hint{font-size:.85rem;color:var(--mut)}
+pre{white-space:pre-wrap;word-break:break-word;background:rgba(255,255,255,.4);border:1.5px dashed var(--bd);border-radius:16px;padding:14px;font-family:inherit;font-size:.92rem;line-height:1.5;max-height:230px;overflow:auto;color:var(--tx)}
+.conf{position:fixed;top:-20px;width:9px;height:14px;z-index:5;pointer-events:none;animation:fall linear forwards}
+</style>
+</head>
+<body>
+<div class="wrap"><div class="card" id="app"></div></div>
+<script>
+var Q=[
+{k:"Plan ideal de tarde",e:"☀️",q:"Será una tardecita... ¿cómo imaginas tu plan ideal?",t:"one",o:["Algo tranquilo y acogedor","Salir a pasear y conocer un lugar","Una aventura al aire libre","Una tarde con música y baile","Sorpréndeme 😊"]},
+{k:"Compañía",e:"👯",q:"¿Con quién te gustaría pasarla?",t:"one",o:["Solo con una persona especial","Pocas personas cercanas","Un grupo grande de amigos","Con la familia"]},
+{k:"Comida",e:"🍕",q:"Para comer o merendar, ¿qué te encanta? (elige las que quieras)",t:"multi",o:["Pizza o pasta","Tacos o comida mexicana","Sushi","Parrillada y carnes","Comida típica","Algo ligero o vegetariano","Sándwiches y snacks","Cualquiera, soy fácil 😄"]},
+{k:"Dulces",e:"🍰",q:"¿Qué dulce no puede faltar?",t:"multi",o:["Pastel","Helado","Chocolate","Cheesecake","Frutas","Crepes o waffles","No soy de dulces"]},
+{k:"Bebida",e:"🧋",q:"¿Qué te gusta tomar?",t:"multi",o:["Café","Té","Jugos naturales","Batidos o frappés","Bubble tea","Gaseosa","Algo sin azúcar"]},
+{k:"Lugar",e:"📍",q:"¿Qué tipo de lugar te gusta?",t:"multi",o:["Restaurante bonito","Cafetería acogedora","Naturaleza o parque","En casa, cómoda","Mirador con vista bonita","Un lugar con música en vivo"]},
+{k:"Música",e:"🎶",q:"¿Qué música te pone de buen humor?",t:"multi",o:["Pop","Reggaetón","Salsa o bachata","Rock","Baladas","Indie o chill"]},
+{k:"Regalo",e:"🎁",q:"¿Qué tipo de detalle te hace más ilusión?",t:"multi",o:["Algo hecho a mano","Una experiencia","Algo útil","Ropa o accesorios","Libros, arte o manualidades","Peluches o detalles tiernos"]},
+{k:"Flores (tipo)",e:"💐",q:"Voy a llevarte flores 🌷 ¿cuáles te gustan más?",t:"multi",o:["Rosas","Girasoles","Tulipanes","Lirios","Margaritas","Orquídeas","Ramo variado","No soy de flores"]},
+{k:"Flores (color)",e:"🎨",q:"¿Y en qué colores las prefieres?",t:"multi",o:["Rosado","Rojo","Blanco","Amarillo","Lila o morado","Naranja","Colores variados"]},
+{k:"Sorpresas",e:"🎉",q:"¿Qué opinas de las sorpresas?",t:"one",o:["Me encantan, cuanto más mejor","Pequeñas sí, grandes no","Prefiero saber qué va a pasar"]},
+{k:"Evitar",e:"🙅",q:"¿Hay algo que no te guste o alguna alergia que deba saber?",t:"text",ph:"Comidas, ruidos, lugares, alergias..."},
+{k:"Sueño de cumple",e:"✨",q:"¿Algo que siempre hayas querido hacer o tener en un cumpleaños?",t:"text",ph:"Escribe lo que quieras, sin límites ✨"}
+];
+var A={},i=-1,name="";
+var app=document.getElementById("app");
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+(function(){var em=["🌸","🌷","🌼","💮","🌺","🎈"];for(var n=0;n<14;n++){var d=document.createElement("div");d.className="petal";d.textContent=em[n%em.length];d.style.left=Math.random()*100+"vw";d.style.animationDuration=(9+Math.random()*10)+"s";d.style.animationDelay=(-Math.random()*14)+"s";d.style.fontSize=(16+Math.random()*16)+"px";document.body.appendChild(d)}})();
+function intro(){
+app.innerHTML='<span class="big">🎂</span><h1>¡Se acerca tu cumpleaños!</h1>'+
+'<p>Quiero que ese día sea muy bonito y especial para ti, pero todavía no te conozco lo suficiente como para acertar con todo 🙈</p>'+
+'<p>Por eso preparé estas preguntitas sobre tus gustos. No hay respuestas correctas ni incorrectas: solo sé tú. Toma menos de 3 minutos.</p>'+
+'<input type="text" id="nm" placeholder="¿Cómo te llamas?" maxlength="40">'+
+'<div class="row"><button class="btn" id="go">Empezar 🎈</button></div>';
+document.getElementById("go").onclick=function(){name=document.getElementById("nm").value.trim();i=0;show()};
+}
+function show(){
+if(i>=Q.length){return end()}
+var q=Q[i];
+var h='<div class="bar"><i style="width:'+(i/Q.length*100)+'%"></i></div><p class="hint">Pregunta '+(i+1)+' de '+Q.length+'</p><span class="qe">'+q.e+'</span><h2>'+esc(q.q)+'</h2>';
+if(q.t==="text"){h+='<textarea id="tx" placeholder="'+esc(q.ph)+'">'+esc(A[i]||"")+'</textarea>'}
+else{h+='<div class="opts">';q.o.forEach(function(o,n){var s=q.t==="multi"?(A[i]||[]).indexOf(o)>-1:A[i]===o;h+='<button class="opt'+(s?" sel":"")+'" data-n="'+n+'">'+esc(o)+'</button>'});h+='</div>';if(q.t==="multi")h+='<p class="hint">Puedes elegir varias.</p>'}
+h+='<div class="row">'+(i>0?'<button class="btn sec" id="bk">Atrás</button>':'')+'<button class="btn" id="nx">'+(i===Q.length-1?'Terminar 🎉':'Siguiente')+'</button></div>';
+app.innerHTML=h;
+var nx=document.getElementById("nx");
+if(q.t!=="text"){
+var upd=function(){var v=A[i];nx.disabled=!(v&&v.length)};upd();
+Array.prototype.forEach.call(app.querySelectorAll(".opt"),function(b){b.onclick=function(){
+var o=q.o[+b.dataset.n];
+if(q.t==="multi"){var a=A[i]||[];var p=a.indexOf(o);if(p>-1)a.splice(p,1);else a.push(o);A[i]=a;b.classList.toggle("sel")}
+else{A[i]=o;Array.prototype.forEach.call(app.querySelectorAll(".opt"),function(x){x.classList.remove("sel")});b.classList.add("sel")}
+upd()}});
+}
+nx.onclick=function(){if(q.t==="text")A[i]=document.getElementById("tx").value.trim();i++;show()};
+var bk=document.getElementById("bk");if(bk)bk.onclick=function(){if(q.t==="text")A[i]=document.getElementById("tx").value.trim();i--;show()};
+}
+function summary(){
+var t="🎂 Respuestas"+(name?" de "+name:"")+":\n\n";
+Q.forEach(function(q,n){var v=A[n];if(Array.isArray(v))v=v.join(", ");t+="• "+q.k+": "+(v||"(sin respuesta)")+"\n"});
+return t;
+}
+function confetti(){var c=["#ff6f9c","#ffd166","#7bdff2","#b794f6","#8ce99a"];for(var n=0;n<60;n++){var d=document.createElement("div");d.className="conf";d.style.left=Math.random()*100+"vw";d.style.background=c[n%5];d.style.animationDuration=(2+Math.random()*2.5)+"s";d.style.animationDelay=(Math.random()*.8)+"s";document.body.appendChild(d);setTimeout(function(x){x.remove()},5500,d)}}
+function end(){
+var s=summary();
+app.innerHTML='<div class="bar"><i style="width:100%"></i></div><span class="big">🥳</span><h1>¡Gracias por responder'+(name?", "+esc(name):"")+'!</h1>'+
+'<p>Tus respuestas serán tenidas muy en cuenta... el pastel ya está nervioso, las flores ya están eligiendo outfit y yo ya tengo mi libretita lista 📝💐</p>'+
+'<p><b>Último paso:</b> toca el botón, copia tus respuestas y pégalas en un mensaje para mandármelas 💌</p>'+
+'<pre id="sm">'+esc(s)+'</pre>'+
+'<div class="row"><button class="btn" id="cp">Copiar respuestas 📋</button></div>'+
+'<p class="hint" id="ms" style="margin-top:12px"></p>';
+confetti();
+document.getElementById("cp").onclick=function(){
+var m=document.getElementById("ms");
+function ok(){m.textContent="¡Copiado! Ahora pégalo en un mensaje y envíamelo 😊"}
+function fb(){var r=document.createRange();r.selectNodeContents(document.getElementById("sm"));var se=window.getSelection();se.removeAllRanges();se.addRange(r);m.textContent="Selecciona el texto de arriba y cópialo manualmente."}
+try{navigator.clipboard.writeText(s).then(ok,fb)}catch(e){fb()}
+confetti();
+};
+}
+intro();
+</script>
+</body>
+</html>
